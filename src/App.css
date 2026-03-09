@@ -645,3 +645,185 @@ tr:hover td {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--brand-primary);
 }
+
+/* ─── Hamburger button ─────────────────────────────────── */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.hamburger-btn span {
+  display: block;
+  height: 2px;
+  background: var(--brand-dark);
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+/* Sidebar overlay for mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 99;
+}
+
+/* ─── Helper: hide/show date variants ───────────────────── */
+.header-date-short { display: none; }
+.header-user-info  { display: block; }
+
+/* ─── 1200px — wide tablet / small laptop ───────────────── */
+@media (max-width: 1200px) {
+  :root { --sidebar-width: 200px; }
+
+  .stat-cards          { grid-template-columns: repeat(2, 1fr); }
+  .kpi-cards-6         { grid-template-columns: repeat(3, 1fr); }
+  .analytics-grid-3    { grid-template-columns: repeat(2, 1fr); }
+  .pos-layout          { grid-template-columns: 240px 1fr 280px; }
+}
+
+/* ─── 960px — tablet ────────────────────────────────────── */
+@media (max-width: 960px) {
+  :root { --sidebar-width: 180px; }
+
+  .page-content        { padding: 20px; }
+  .dashboard-grid      { grid-template-columns: 1fr; }
+  .crm-layout          { grid-template-columns: 1fr; }
+  .commission-layout   { grid-template-columns: 1fr; }
+  .promotions-layout   { grid-template-columns: 1fr; }
+  .pos-layout          { grid-template-columns: 1fr 1fr; height: auto; overflow: visible; }
+  /* On tablet POS: stack checkout panel below */
+  .pos-layout > :nth-child(3) { grid-column: 1 / -1; }
+
+  .analytics-grid-2    { grid-template-columns: 1fr; }
+}
+
+/* ─── 768px — mobile ────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Show hamburger, hide sidebar by default */
+  .hamburger-btn       { display: flex; }
+  .sidebar-overlay     { display: block; }
+
+  /* Sidebar slides in from left */
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transition: left 0.25s ease;
+    width: 240px !important;
+  }
+  .sidebar.sidebar-open { left: 0; }
+
+  /* Main area takes full width */
+  .main-area           { width: 100%; }
+
+  /* Header adjustments */
+  .header              { padding: 0 16px; }
+  .header-date-full    { display: none; }
+  .header-date-short   { display: inline; }
+  .header-user-info    { display: none; }
+  .user-avatar         { width: 32px; height: 32px; font-size: 11px; }
+
+  /* Page padding */
+  .page-content        { padding: 16px; }
+
+  /* Stat cards → 2 columns */
+  .stat-cards          { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+  .stat-card           { padding: 16px; }
+  .stat-card .stat-value { font-size: 24px; }
+
+  /* KPI cards → 2 columns */
+  .kpi-cards-6         { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .kpi-card .kpi-value { font-size: 18px; }
+
+  /* Dashboard grid → stack */
+  .dashboard-grid      { grid-template-columns: 1fr; gap: 14px; }
+
+  /* Analytics → stack everything */
+  .analytics-grid-2    { grid-template-columns: 1fr; }
+  .analytics-grid-3    { grid-template-columns: 1fr; }
+
+  /* POS → stack all 3 panels */
+  .pos-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+  .pos-layout > * { max-height: none; }
+  .pos-panel       { min-height: 200px; }
+
+  /* CRM → hide right panel (show full table) */
+  .crm-layout          { grid-template-columns: 1fr; }
+
+  /* Commission → stack */
+  .commission-layout   { grid-template-columns: 1fr; }
+
+  /* Promotions → stack */
+  .promotions-layout   { grid-template-columns: 1fr; }
+
+  /* Calendar → horizontal scroll */
+  .calendar-grid       { overflow-x: auto; min-width: 600px; }
+  .calendar-wrapper    { overflow-x: auto; }
+
+  /* Tables → horizontal scroll */
+  .table-wrapper       { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  td, th               { padding: 10px 12px; font-size: 12px; white-space: nowrap; }
+
+  /* Section header */
+  .section-header      { flex-wrap: wrap; gap: 10px; }
+  .section-header .btn { width: 100%; justify-content: center; }
+
+  /* Service grid in POS → 2 cols */
+  .service-grid        { grid-template-columns: repeat(2, 1fr); }
+
+  /* Modals → full width on mobile */
+  .modal               { max-width: 100% !important; border-radius: 16px 16px 0 0; }
+  .modal-overlay       { align-items: flex-end; padding: 0; }
+
+  /* Detail panel → full screen */
+  .detail-panel        { width: 100%; }
+
+  /* Calendar toolbar → wrap */
+  .calendar-toolbar    { flex-direction: column; align-items: flex-start; }
+  .date-range-label    { min-width: unset; font-size: 14px; }
+
+  /* Payment methods → 2 cols */
+  .payment-methods     { grid-template-columns: 1fr 1fr; }
+
+  /* Step indicator → smaller */
+  .step-dot            { width: 24px; height: 24px; font-size: 11px; }
+}
+
+/* ─── 480px — small mobile ──────────────────────────────── */
+@media (max-width: 480px) {
+  /* Stat cards → 2 cols, more compact */
+  .stat-cards          { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-card           { padding: 14px 12px; }
+  .stat-card .stat-value { font-size: 22px; }
+  .stat-card .stat-label-cn { font-size: 11px; }
+
+  /* KPI cards → 2 cols */
+  .kpi-cards-6         { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  /* Reduce page padding further */
+  .page-content        { padding: 12px; }
+  .header              { padding: 0 12px; }
+
+  /* Service grid → single col on very small screens */
+  .service-grid        { grid-template-columns: 1fr; }
+
+  /* Hide less important table columns handled inline */
+  .header-title .page-title-en { display: none; }
+}

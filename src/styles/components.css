@@ -154,11 +154,18 @@
   text-align: center;
 }
 
+.calendar-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
 .calendar-grid {
   background: var(--white);
   border-radius: 12px;
-  border: 1px solid var(--border);
   overflow: hidden;
+  min-width: 580px;
 }
 
 .calendar-header-row {

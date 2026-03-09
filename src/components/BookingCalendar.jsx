@@ -90,6 +90,7 @@ export default function BookingCalendar() {
       </div>
 
       {/* Calendar Grid */}
+      <div className="calendar-wrapper">
       <div className="calendar-grid">
         {/* Header */}
         <div className="calendar-header-row">
@@ -135,6 +136,7 @@ export default function BookingCalendar() {
             </div>
           ))}
         </div>
+      </div>
       </div>
 
       {/* Therapist legend */}

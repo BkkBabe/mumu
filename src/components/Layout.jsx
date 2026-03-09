@@ -1,4 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 const NAV_ITEMS = [
   { path: '/dashboard', cn: '总览', en: 'Dashboard', icon: '⊞' },
@@ -26,14 +27,38 @@ export default function Layout() {
   const location = useLocation()
   const pageKey = '/' + location.pathname.split('/')[1]
   const title = PAGE_TITLES[pageKey] || { cn: '木木d店', en: 'Mumuddian ERP' }
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setSidebarOpen(false)
+  }, [location.pathname])
+
+  // Close sidebar on outside click
+  useEffect(() => {
+    if (!sidebarOpen) return
+    const handler = (e) => {
+      if (!e.target.closest('.sidebar') && !e.target.closest('.hamburger-btn')) {
+        setSidebarOpen(false)
+      }
+    }
+    document.addEventListener('click', handler)
+    return () => document.removeEventListener('click', handler)
+  }, [sidebarOpen])
 
   const now = new Date()
   const dateStr = now.toLocaleDateString('zh-HK', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
+  const dateStrShort = now.toLocaleDateString('zh-HK', { month: 'short', day: 'numeric' })
 
   return (
     <div className="app-layout">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+      )}
+
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className={`sidebar${sidebarOpen ? ' sidebar-open' : ''}`}>
         <div className="sidebar-logo">
           <div className="brand-name">木木d店</div>
           <div className="brand-sub">Mumuddian Wellness</div>
@@ -62,17 +87,27 @@ export default function Layout() {
       <div className="main-area">
         {/* Header */}
         <header className="header">
-          <div className="header-title">
-            <span className="page-title-cn">{title.cn}</span>
-            <span className="page-title-en">{title.en}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              className="hamburger-btn"
+              onClick={() => setSidebarOpen(o => !o)}
+              aria-label="Toggle menu"
+            >
+              <span /><span /><span />
+            </button>
+            <div className="header-title">
+              <span className="page-title-cn">{title.cn}</span>
+              <span className="page-title-en">{title.en}</span>
+            </div>
           </div>
           <div className="header-right">
-            <span className="header-date">{dateStr}</span>
+            <span className="header-date header-date-full">{dateStr}</span>
+            <span className="header-date header-date-short">{dateStrShort}</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div className="user-avatar">Admin</div>
-              <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                <div style={{ fontFamily: 'Noto Serif SC', fontWeight: 600, color: 'var(--brand-dark)' }}>管理员</div>
-                <div style={{ fontSize: 10 }}>Administrator</div>
+              <div className="user-avatar">Ad</div>
+              <div className="header-user-info">
+                <div style={{ fontFamily: 'Noto Serif SC', fontWeight: 600, color: 'var(--brand-dark)', fontSize: 12 }}>管理员</div>
+                <div style={{ fontSize: 10, color: 'var(--text-secondary)' }}>Administrator</div>
               </div>
             </div>
           </div>
