@@ -646,36 +646,9 @@ tr:hover td {
   background: var(--brand-primary);
 }
 
-/* ─── Hamburger button ─────────────────────────────────── */
-.hamburger-btn {
+/* ─── Mobile top nav bar (hidden on desktop) ───────────── */
+.mobile-topnav {
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 36px;
-  height: 36px;
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 6px 8px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.hamburger-btn span {
-  display: block;
-  height: 2px;
-  background: var(--brand-dark);
-  border-radius: 2px;
-  transition: all 0.2s;
-}
-
-/* Sidebar overlay for mobile */
-.sidebar-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 99;
 }
 
 /* ─── Helper: hide/show date variants ───────────────────── */
@@ -702,29 +675,14 @@ tr:hover td {
   .commission-layout   { grid-template-columns: 1fr; }
   .promotions-layout   { grid-template-columns: 1fr; }
   .pos-layout          { grid-template-columns: 1fr 1fr; height: auto; overflow: visible; }
-  /* On tablet POS: stack checkout panel below */
   .pos-layout > :nth-child(3) { grid-column: 1 / -1; }
-
   .analytics-grid-2    { grid-template-columns: 1fr; }
 }
 
 /* ─── 768px — mobile ────────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Show hamburger, hide sidebar by default */
-  .hamburger-btn       { display: flex; }
-  .sidebar-overlay     { display: block; }
-
-  /* Sidebar slides in from left */
-  .sidebar {
-    position: fixed;
-    left: -100%;
-    top: 0;
-    bottom: 0;
-    z-index: 100;
-    transition: left 0.25s ease;
-    width: 240px !important;
-  }
-  .sidebar.sidebar-open { left: 0; }
+  /* Hide desktop sidebar entirely */
+  .sidebar             { display: none; }
 
   /* Main area takes full width */
   .main-area           { width: 100%; }
@@ -735,6 +693,48 @@ tr:hover td {
   .header-date-short   { display: inline; }
   .header-user-info    { display: none; }
   .user-avatar         { width: 32px; height: 32px; font-size: 11px; }
+
+  /* ── Mobile top nav bar ── */
+  .mobile-topnav {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: var(--brand-dark);
+    border-bottom: 1px solid rgba(199,169,140,0.2);
+    scrollbar-width: none;
+    flex-shrink: 0;
+  }
+  .mobile-topnav::-webkit-scrollbar { display: none; }
+
+  .mobile-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 10px 14px;
+    text-decoration: none;
+    color: rgba(226,207,187,0.65);
+    border-bottom: 3px solid transparent;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    min-width: 64px;
+  }
+  .mobile-tab:hover {
+    color: var(--brand-primary);
+    background: rgba(199,169,140,0.1);
+  }
+  .mobile-tab.active {
+    color: var(--brand-primary);
+    border-bottom-color: var(--brand-primary);
+    background: rgba(199,169,140,0.15);
+  }
+  .mobile-tab-icon  { font-size: 18px; line-height: 1; }
+  .mobile-tab-label {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 10px;
+    white-space: nowrap;
+    line-height: 1;
+  }
 
   /* Page padding */
   .page-content        { padding: 16px; }
@@ -764,17 +764,12 @@ tr:hover td {
   .pos-layout > * { max-height: none; }
   .pos-panel       { min-height: 200px; }
 
-  /* CRM → hide right panel (show full table) */
+  /* CRM, Commission, Promotions → stack */
   .crm-layout          { grid-template-columns: 1fr; }
-
-  /* Commission → stack */
   .commission-layout   { grid-template-columns: 1fr; }
-
-  /* Promotions → stack */
   .promotions-layout   { grid-template-columns: 1fr; }
 
   /* Calendar → horizontal scroll */
-  .calendar-grid       { overflow-x: auto; min-width: 600px; }
   .calendar-wrapper    { overflow-x: auto; }
 
   /* Tables → horizontal scroll */
@@ -788,7 +783,7 @@ tr:hover td {
   /* Service grid in POS → 2 cols */
   .service-grid        { grid-template-columns: repeat(2, 1fr); }
 
-  /* Modals → full width on mobile */
+  /* Modals → bottom sheet */
   .modal               { max-width: 100% !important; border-radius: 16px 16px 0 0; }
   .modal-overlay       { align-items: flex-end; padding: 0; }
 
@@ -808,22 +803,21 @@ tr:hover td {
 
 /* ─── 480px — small mobile ──────────────────────────────── */
 @media (max-width: 480px) {
-  /* Stat cards → 2 cols, more compact */
   .stat-cards          { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .stat-card           { padding: 14px 12px; }
   .stat-card .stat-value { font-size: 22px; }
   .stat-card .stat-label-cn { font-size: 11px; }
 
-  /* KPI cards → 2 cols */
   .kpi-cards-6         { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 
-  /* Reduce page padding further */
   .page-content        { padding: 12px; }
   .header              { padding: 0 12px; }
 
-  /* Service grid → single col on very small screens */
   .service-grid        { grid-template-columns: 1fr; }
-
-  /* Hide less important table columns handled inline */
   .header-title .page-title-en { display: none; }
+
+  /* Slightly wider tabs on small screens */
+  .mobile-tab          { min-width: 56px; padding: 9px 10px; }
+  .mobile-tab-icon     { font-size: 16px; }
+  .mobile-tab-label    { font-size: 9px; }
 }

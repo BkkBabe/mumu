@@ -1,5 +1,4 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
 
 const NAV_ITEMS = [
   { path: '/dashboard', cn: '总览', en: 'Dashboard', icon: '⊞' },
@@ -27,24 +26,6 @@ export default function Layout() {
   const location = useLocation()
   const pageKey = '/' + location.pathname.split('/')[1]
   const title = PAGE_TITLES[pageKey] || { cn: '木木d店', en: 'Mumuddian ERP' }
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  // Close sidebar on route change (mobile)
-  useEffect(() => {
-    setSidebarOpen(false)
-  }, [location.pathname])
-
-  // Close sidebar on outside click
-  useEffect(() => {
-    if (!sidebarOpen) return
-    const handler = (e) => {
-      if (!e.target.closest('.sidebar') && !e.target.closest('.hamburger-btn')) {
-        setSidebarOpen(false)
-      }
-    }
-    document.addEventListener('click', handler)
-    return () => document.removeEventListener('click', handler)
-  }, [sidebarOpen])
 
   const now = new Date()
   const dateStr = now.toLocaleDateString('zh-HK', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })
@@ -52,13 +33,8 @@ export default function Layout() {
 
   return (
     <div className="app-layout">
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
-      )}
-
-      {/* Sidebar */}
-      <aside className={`sidebar${sidebarOpen ? ' sidebar-open' : ''}`}>
+      {/* Sidebar — desktop only */}
+      <aside className="sidebar">
         <div className="sidebar-logo">
           <div className="brand-name">木木d店</div>
           <div className="brand-sub">Mumuddian Wellness</div>
@@ -78,27 +54,16 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="sidebar-footer">
-          v1.0.0 · 演示版本
-        </div>
+        <div className="sidebar-footer">v1.0.0 · 演示版本</div>
       </aside>
 
       {/* Main area */}
       <div className="main-area">
         {/* Header */}
         <header className="header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <button
-              className="hamburger-btn"
-              onClick={() => setSidebarOpen(o => !o)}
-              aria-label="Toggle menu"
-            >
-              <span /><span /><span />
-            </button>
-            <div className="header-title">
-              <span className="page-title-cn">{title.cn}</span>
-              <span className="page-title-en">{title.en}</span>
-            </div>
+          <div className="header-title">
+            <span className="page-title-cn">{title.cn}</span>
+            <span className="page-title-en">{title.en}</span>
           </div>
           <div className="header-right">
             <span className="header-date header-date-full">{dateStr}</span>
@@ -112,6 +77,20 @@ export default function Layout() {
             </div>
           </div>
         </header>
+
+        {/* Mobile top tab bar — hidden on desktop */}
+        <nav className="mobile-topnav">
+          {NAV_ITEMS.map(item => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) => `mobile-tab${isActive ? ' active' : ''}`}
+            >
+              <span className="mobile-tab-icon">{item.icon}</span>
+              <span className="mobile-tab-label">{item.cn}</span>
+            </NavLink>
+          ))}
+        </nav>
 
         {/* Page content */}
         <main className="page-content">
